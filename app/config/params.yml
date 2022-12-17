@@ -1,0 +1,42 @@
+# 项目工程所有的参数在此配置（除了核酸区域需要借助额外的labelme软件进行配置）
+
+# 输入的分析源头路径，可以是一个视频（mp4、avi），也可以是rtsp流（输入是 rtsp url），也可以是自带摄像头（比如电脑自带的前置摄像头，输入则是：0）
+input_source: video/sample.mp4 
+#input_source: rtsp://admin:hzyj1234@192.168.2.79:554/h264/ch1/main/av_stream
+#input_source: 0
+
+
+# stack 最大存储图像的数量
+max_img_frame_nums: 100
+# 每隔若干帧取1帧，送去AI识别，目前在开发板上基于cpu的推理时间约为1.5s，建议该值不小于实际源头的fps*2
+skip_frame_nums: 50
+
+
+# 当队伍少于以下参数设定的人数时，即邮件上报
+min_person_queue_nums: 8
+
+
+# 邮件上报识别信息的周期时间，单位是：秒
+every_report_by_email_gap_time: 60
+# 发送监控信息所使用的邮箱，已测试126邮箱，当前程序基于的是网易的SMTP服务器，具体可以参考网易的邮件配置信息：http://help.163.com/09/0219/10/52GOPOND007536NI.html
+# 发送监控信息所使用的邮箱账户名
+email_sender_account_usr: your_email@126.com
+# 发送监控信息所使用的邮箱账户密码
+email_sender_account_pwd: your_email_password 
+# 接收监控信息所使用的邮箱账户名
+email_receiver_account_usr: your_email@126.com
+# 接收到的监控信息提示邮件主题
+email_subject: 核酸排队人数空闲提醒
+# 接收到的监控信息提示邮件内容模板，以下配置中的 [] 最终会被实际识别出的人数个数替换掉
+emial_content_template: 当前核酸排队人数[]人，可下楼排队
+
+
+
+# 模型所有的种类名称以及顺序
+classes: ['person']
+# 模型的路径
+model_path: model/covid19_test_queue_monitor.onnx
+# 置信度阈值
+conf_threshold: 0.45
+# iou 阈值
+iou_threshold: 0.5
